@@ -1,5 +1,7 @@
 package by.vadim_churun.individual.progen.model.entity
 
+import by.vadim_churun.individual.progen.model.engine.MutableTemplateArguments
+import by.vadim_churun.individual.progen.model.engine.TemplateArguments
 import java.io.File
 
 
@@ -9,7 +11,7 @@ import java.io.File
 class ProjectFile private constructor(
     val file: File,
     val templateName: String?,
-    val templateArgs: Map<String, String>
+    val templateArgs: TemplateArguments
 ): ProjectNode() {
 
     override fun create(): CreateStatus {
@@ -25,7 +27,7 @@ class ProjectFile private constructor(
     class Builder {
         private var fileName = ""
         private var templateName: String? = null
-        private val templateArgs = hashMapOf<String, String>()
+        private val templateArgs = MutableTemplateArguments()
 
 
         fun setName(value: String) {
@@ -39,7 +41,7 @@ class ProjectFile private constructor(
 
         fun addTemplateArgument(key: String, value: String) {
             templateName ?: throw IllegalStateException("Template is not defined")
-            templateArgs[key] = value
+            templateArgs.add(key, value)
         }
 
         fun build(): ProjectFile {

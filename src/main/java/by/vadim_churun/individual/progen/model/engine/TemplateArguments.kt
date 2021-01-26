@@ -1,5 +1,7 @@
 package by.vadim_churun.individual.progen.model.engine
 
+import by.vadim_churun.individual.progen.model.entity.ProjectNode
+
 
 /** A set of key-value pairs wrapped to parse strings into something more useful. **/
 open class TemplateArguments {
@@ -71,5 +73,53 @@ open class TemplateArguments {
         }
 
         return long.toInt()
+    }
+
+    fun <E: Enum<E>> getEnumConstant(
+        key: String,
+        enumClass: Class<E>,
+        default: E? = null
+    ): E {
+
+        val desired = map[key]?.toSnakeCase()
+        if(desired == null) {
+            return default
+                ?: throw IllegalStateException("Missing enumerated type parameter '$key'")
+        }
+
+        val consts = enumClass.enumConstants
+        for(c in consts) {
+            val actual = c.name.toSnakeCase()
+            if(actual == desired) {
+                return c
+            }
+        }
+
+        val constsStr = listEnumConstants(consts)
+        throw IllegalArgumentException(
+            "Cannot represent value '${map[key]}' " +
+            "of parameter '$key' " +
+            "as either of $constsStr"
+        )
+    }
+
+
+    private fun String.toSnakeCase()
+        = toLowerCase().replace(' ', '_')
+
+    private fun listEnumConstants(
+        consts: Array< out Enum<*> >
+    ): String {
+
+        val sb = StringBuilder("[")
+        for(c in consts) {
+            if(sb.length > 1) {
+                sb.append(", ")
+            }
+            sb.append(c.name)
+        }
+        sb.append("]")
+
+        return sb.toString()
     }
 }
