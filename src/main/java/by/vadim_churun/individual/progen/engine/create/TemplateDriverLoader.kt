@@ -1,11 +1,13 @@
 package by.vadim_churun.individual.progen.engine.create
 
+import by.vadim_churun.individual.progen.driver.front.HtmlDriver
 import by.vadim_churun.individual.progen.driver.front.ReactPackageJsonDriver
 import by.vadim_churun.individual.progen.model.engine.TemplateDriver
 
 
 object TemplateDriverLoader {
     private val classNames = hashMapOf<String, String>(
+        "html"         to HtmlDriver::class.java.name,
         "reactPackage" to ReactPackageJsonDriver::class.java.name
     )
 
