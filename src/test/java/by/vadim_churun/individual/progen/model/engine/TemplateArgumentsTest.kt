@@ -10,7 +10,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getStringPositive() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myKey", "myValue")
         val actual = args.getString("myKey")
         Assertions.assertEquals("myValue", actual)
@@ -18,7 +18,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getStringNegative() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myKey", "myValue")
 
         Assertions.assertThrows(IllegalStateException::class.java) {
@@ -28,7 +28,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getStringCase() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myKey", "myValue")
 
         Assertions.assertThrows(IllegalStateException::class.java) {
@@ -38,7 +38,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getStringDefault() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("specifiedKey", "desiredValue")
         val actual = args.getString("anotherKey", "defaultValue")
         Assertions.assertEquals("defaultValue", actual)
@@ -50,7 +50,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getInt() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myInt", "17305")
         val actual = args.getInt("myInt")
         Assertions.assertEquals(17305, actual)
@@ -58,7 +58,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntBadFormat() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myInt", "Not an integer")
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             args.getInt("myInt")
@@ -67,7 +67,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntDefault() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myInt", "Not an integer")
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             args.getInt("myInt", 42)
@@ -76,7 +76,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntSpaces() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myInt", "   73 041  522 ")
         val actual = args.getInt("myInt")
         Assertions.assertEquals(73_041_522, actual)
@@ -84,7 +84,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntUnderscores() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myInt", "73__041__522")
         val actual = args.getInt("myInt")
         Assertions.assertEquals(73_041_522, actual)
@@ -92,7 +92,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntNegative() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("negativeInt", "-38")
         val actual = args.getInt("negativeInt")
         Assertions.assertEquals(-38, actual)
@@ -100,7 +100,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntMixed() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("mixedInt", "  - 74_870 ")
         val actual = args.getInt("mixedInt")
         Assertions.assertEquals(-74_870, actual)
@@ -108,7 +108,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getLong() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myLong", "18 364 293 714")
         val actual = args.getLong("myLong")
         Assertions.assertEquals(18_364_293_714L, actual)
@@ -116,7 +116,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntTooBig() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myInt", "18 364 293 714")
 
         Assertions.assertThrows(IllegalArgumentException::class.java) {
@@ -126,7 +126,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getFloatPoint() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myFloat", "18.52")
         val actual = args.getFloat("myFloat")
         Assertions.assertEquals(18.52f, actual)
@@ -134,7 +134,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getFloatComma() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("myFloat", "18,52")
         val actual = args.getFloat("myFloat")
         Assertions.assertEquals(18.52f, actual)
@@ -142,7 +142,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getFloatComplex() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("complexFloat", "  - 173_854 , 15_30 ")
         val actual = args.getFloat("complexFloat")
         Assertions.assertEquals(-173_854.1530f, actual)
@@ -150,7 +150,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getIntAsFloat() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("int", "13")
         val actual = args.getFloat("int")
         Assertions.assertEquals(13f, actual)
@@ -158,7 +158,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getDouble() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("double", "128500.875")
         val actual = args.getDouble("double")
         Assertions.assertEquals(128500.875, actual)
@@ -170,7 +170,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getTrue() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("b1", "true")
         args.add("b2", "yes")
         args.add("b3", "on")
@@ -187,7 +187,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun getFalse() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("b1", "false")
         args.add("b2", "no")
         args.add("b3", "off")
@@ -204,7 +204,7 @@ class TemplateArgumentsTest {
 
     @Test
     fun booleansNoise() {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("b1", "  truE ")
         args.add("b2", " oFF  ")
 
@@ -255,7 +255,7 @@ class TemplateArgumentsTest {
 
 
     private fun testEnum(input: String, expected: TestEnum?) {
-        val args = MutableTemplateArguments()
+        val args = MutableArguments()
         args.add("enum", input)
 
         if(expected == null) {

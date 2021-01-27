@@ -1,7 +1,7 @@
 package by.vadim_churun.individual.progen.model.entity
 
-import by.vadim_churun.individual.progen.model.engine.MutableTemplateArguments
-import by.vadim_churun.individual.progen.model.engine.TemplateArguments
+import by.vadim_churun.individual.progen.model.engine.MutableArguments
+import by.vadim_churun.individual.progen.model.engine.Arguments
 import java.io.File
 
 
@@ -11,7 +11,7 @@ import java.io.File
 class ProjectFile private constructor(
     val file: File,
     val templateName: String?,
-    val templateArgs: TemplateArguments
+    val templateArgs: Arguments
 ): ProjectNode() {
 
     override fun create(): CreateStatus {
@@ -27,7 +27,7 @@ class ProjectFile private constructor(
     class Builder {
         private var fileName = ""
         private var templateName: String? = null
-        private val templateArgs = MutableTemplateArguments()
+        private val templateArgs = MutableArguments()
 
 
         fun setName(value: String) {

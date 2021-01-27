@@ -1,7 +1,7 @@
 package by.vadim_churun.individual.progen.model.engine
 
 
-class MutableTemplateArguments: TemplateArguments() {
+class MutableArguments: Arguments() {
 
     fun add(key: String, value: String) {
         if(map.containsKey(key)) {

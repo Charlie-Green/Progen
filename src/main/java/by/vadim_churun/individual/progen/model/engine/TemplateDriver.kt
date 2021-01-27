@@ -5,5 +5,5 @@ import java.io.PrintWriter
 
 /** Generates content of a single file. **/
 interface TemplateDriver {
-    fun generate(wr: PrintWriter, args: TemplateArguments)
+    fun generate(wr: PrintWriter, args: Arguments)
 }

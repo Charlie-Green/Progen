@@ -2,7 +2,7 @@ package by.vadim_churun.individual.progen.model.engine
 
 
 /** A set of key-value pairs wrapped to parse strings into something more useful. **/
-open class TemplateArguments {
+open class Arguments {
     protected val map = hashMapOf<String, String>()
 
 
