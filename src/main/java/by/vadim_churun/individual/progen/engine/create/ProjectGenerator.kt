@@ -51,7 +51,7 @@ class ProjectGenerator {
         val driver = TemplateDriverLoader.get(template)
 
         FileOutputStream(file.file).use { ostream ->
-            PrintWriter(ostream).use { writer ->
+            PrintWriter(ostream, false, Charsets.UTF_8).use { writer ->
                 driver.generate(writer, file.templateArgs)
             }
         }

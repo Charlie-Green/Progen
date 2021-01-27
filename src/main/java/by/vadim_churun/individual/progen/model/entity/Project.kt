@@ -23,7 +23,7 @@ class Project private constructor(
 
 
     class Builder(private val parent: File?) {
-        private var path = "./"
+        private var path: String? = null
         private val children = LinkedList<ProjectNode>()
 
         fun setPath(value: String) {
@@ -35,6 +35,13 @@ class Project private constructor(
         }
 
         fun build(): Project {
+            if(path == null) {
+                throw IllegalStateException(
+                    "Project name must be specified." +
+                    (if(parent == null) "" else " Parent: ${parent.absolutePath}")
+                )
+            }
+
             return Project(
                 if(parent == null) File(path) else File(parent, path),
                 children

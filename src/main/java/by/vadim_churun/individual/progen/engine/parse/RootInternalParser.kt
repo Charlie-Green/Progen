@@ -23,7 +23,7 @@ internal class RootInternalParser(
                         throw IllegalArgumentException("Root element must be <$ELEMENT_PROJECT>")
                     }
 
-                    return projectParser.parse(null)
+                    return projectParser.parse(null, startEvent)
                 }
             }
         }
