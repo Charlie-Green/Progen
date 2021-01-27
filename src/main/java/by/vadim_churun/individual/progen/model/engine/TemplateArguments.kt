@@ -1,7 +1,5 @@
 package by.vadim_churun.individual.progen.model.engine
 
-import by.vadim_churun.individual.progen.model.entity.ProjectNode
-
 
 /** A set of key-value pairs wrapped to parse strings into something more useful. **/
 open class TemplateArguments {
@@ -17,6 +15,7 @@ open class TemplateArguments {
             ?: throw IllegalStateException("Missing parameter '$key' of type 'string'")
     }
 
+
     fun getBoolean(
         key: String,
         default: Boolean? = null
@@ -29,8 +28,10 @@ open class TemplateArguments {
         return when(str) {
             "true"  -> true
             "yes"   -> true
+            "on"    -> true
             "false" -> false
             "no"    -> false
+            "off"   -> false
 
             null    -> default
                 ?: throw IllegalArgumentException("Missing parameter '$key' of type 'boolean'")
@@ -40,12 +41,13 @@ open class TemplateArguments {
         }
     }
 
+
     fun getLong(
         key: String,
         default: Long? = null
     ): Long {
 
-        val str = map[key]?.trim()
+        val str = map[key]?.replace(numberNoiseRegex, "")
         if(str == null) {
             return default
                 ?: throw IllegalStateException("Missing parameter '$key' of type 'integer'")
@@ -75,22 +77,78 @@ open class TemplateArguments {
         return long.toInt()
     }
 
+
+    fun getDouble(
+        key: String,
+        default: Double? = null
+    ): Double {
+
+        val str = map[key]
+            ?.replace(numberNoiseRegex, "")
+            ?.replace(",", ".")
+
+        if(str == null) {
+            return default
+                ?: throw IllegalStateException("Missing parameter '$key' of type 'float'")
+        }
+
+        try {
+            return str.toDouble()
+        } catch(exc: NumberFormatException) {
+            throw IllegalArgumentException(
+                "Cannot interpret value '${map[key]}' " +
+                "of parameter '$key' " +
+                "as a float",
+                exc
+            )
+        }
+    }
+
+    fun getFloat(
+        key: String,
+        default: Float? = null
+    ): Float {
+
+        val double = getDouble(key, default?.toDouble())
+        if(double < -Float.MAX_VALUE || double > Float.MAX_VALUE) {
+            throw IllegalArgumentException(
+                "Value $double of parameter '$key' exceeds the range of a 4-byte float" )
+        }
+
+        return double.toFloat()
+    }
+
+
     fun <E: Enum<E>> getEnumConstant(
         key: String,
         enumClass: Class<E>,
         default: E? = null
     ): E {
 
-        val desired = map[key]?.toSnakeCase()
-        if(desired == null) {
+        val value = map[key]
+        if(value == null) {
             return default
                 ?: throw IllegalStateException("Missing enumerated type parameter '$key'")
         }
 
+        var processedValue = value
+            .toLowerCase()
+            .replace(enumDelimeterRegex, "_")
+            .replace(underscoreSequenceRegex, "_")
+
+        val index1 = processedValue
+            .indexOfFirst { it != '_' }
+            .let { if(it < 0) 0 else it }
+        val index2 = processedValue
+            .indexOfLast { it != '_' }
+            .let { if(it < 0) processedValue.lastIndex else it }
+            .plus(1)
+        processedValue = processedValue.substring(index1, index2)
+
         val consts = enumClass.enumConstants
         for(c in consts) {
-            val actual = c.name.toSnakeCase()
-            if(actual == desired) {
+            val actual = c.name.toLowerCase()
+            if(actual == processedValue) {
                 return c
             }
         }
@@ -103,9 +161,6 @@ open class TemplateArguments {
         )
     }
 
-
-    private fun String.toSnakeCase()
-        = toLowerCase().replace(' ', '_')
 
     private fun listEnumConstants(
         consts: Array< out Enum<*> >
@@ -121,5 +176,12 @@ open class TemplateArguments {
         sb.append("]")
 
         return sb.toString()
+    }
+
+
+    companion object {
+        private val numberNoiseRegex = Regex("[\\s_]")
+        private val enumDelimeterRegex = Regex("[\\s-]")
+        private val underscoreSequenceRegex = Regex("_+")
     }
 }
