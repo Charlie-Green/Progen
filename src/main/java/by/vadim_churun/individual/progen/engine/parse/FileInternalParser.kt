@@ -4,6 +4,7 @@ import by.vadim_churun.individual.progen.engine.parse.ProjectXmlContract.ATTR_FI
 import by.vadim_churun.individual.progen.engine.parse.ProjectXmlContract.ELEMENT_FILE
 import by.vadim_churun.individual.progen.engine.parse.ProjectXmlContract.ELEMENT_TEMPLATE_ARG
 import by.vadim_churun.individual.progen.model.entity.ProjectFile
+import java.io.File
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.Attribute
 
@@ -14,8 +15,8 @@ internal class FileInternalParser(
     private val templateParser = TemplateArgumentInternalParser(reader)
 
 
-    fun parse(): ProjectFile {
-        val builder = ProjectFile.Builder()
+    fun parse(parent: File): ProjectFile {
+        val builder = ProjectFile.Builder(parent)
 
         while(reader.hasNext()) {
             val event = reader.nextEvent()

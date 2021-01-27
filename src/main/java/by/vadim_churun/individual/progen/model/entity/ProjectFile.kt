@@ -9,10 +9,10 @@ import java.io.File
   * As well as create files, the program may generate its contents using a template,
   * so a template and its parameters may be defined in a [ProjectFile]. **/
 class ProjectFile private constructor(
-    val file: File,
+    file: File,
     val templateName: String?,
     val templateArgs: Arguments
-): ProjectNode() {
+): ProjectNode(file) {
 
     override fun create(): CreateStatus {
         if(file.exists()) {
@@ -24,7 +24,7 @@ class ProjectFile private constructor(
     }
 
 
-    class Builder {
+    class Builder(private val parent: File) {
         private var fileName = ""
         private var templateName: String? = null
         private val templateArgs = MutableArguments()
@@ -50,7 +50,7 @@ class ProjectFile private constructor(
             }
 
             return ProjectFile(
-                File(fileName),
+                File(parent, fileName),
                 templateName,
                 templateArgs
             )

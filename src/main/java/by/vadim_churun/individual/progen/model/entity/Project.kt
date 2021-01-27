@@ -8,9 +8,9 @@ import java.util.LinkedList
   * some other common attributes except the project create path may be defined here.
   * The root element must be [Project]. **/
 class Project private constructor(
-    val file: File,
+    file: File,
     val children: List<ProjectNode>
-): ProjectNode() {
+): ProjectNode(file) {
 
     override fun create(): CreateStatus {
         if(file.exists()) {
@@ -22,7 +22,7 @@ class Project private constructor(
     }
 
 
-    class Builder {
+    class Builder(private val parent: File?) {
         private var path = "./"
         private val children = LinkedList<ProjectNode>()
 
@@ -36,7 +36,7 @@ class Project private constructor(
 
         fun build(): Project {
             return Project(
-                File(path),
+                if(parent == null) File(path) else File(parent, path),
                 children
             )
         }

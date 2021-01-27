@@ -6,9 +6,9 @@ import java.util.LinkedList
 
 /** A folder. May contain child [ProjectNode]s. **/
 class ProjectFolder private constructor(
-    val file: File,
+    file: File,
     val children: List<ProjectNode>
-): ProjectNode() {
+): ProjectNode(file) {
 
     override fun create(): CreateStatus {
         if(file.exists()) {
@@ -20,7 +20,7 @@ class ProjectFolder private constructor(
     }
 
 
-    class Builder {
+    class Builder(private val parent: File) {
         private var name = ""
         private val children = LinkedList<ProjectNode>()
 
@@ -40,7 +40,7 @@ class ProjectFolder private constructor(
             }
 
             return ProjectFolder(
-                File(name),
+                File(parent, name),
                 children
             )
         }
